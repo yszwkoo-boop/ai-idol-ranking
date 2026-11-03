@@ -140,4 +140,31 @@ document.querySelectorAll('.team > .card')
       card.insertBefore(score, name);
     }
   });
+</script><style>
+.rank .crown {
+  display: inline-block;
+  margin-right: 3px;
+}
+</style>
+<script>
+const crownUpdateRanks = updateRanks;
+
+updateRanks = function() {
+  crownUpdateRanks();
+
+  girls.forEach((girl, i) => {
+    const rank = document.getElementById('rank' + i);
+    if (!rank) return;
+
+    const position = 1 + girls.filter(
+      g => g.points > girl.points
+    ).length;
+
+    const isWinner = position === 1 && girl.points > 0;
+
+    rank.textContent = (isWinner ? '👑 ' : '') + position + '位';
+  });
+};
+
+updateRanks();
 </script></body></html>
