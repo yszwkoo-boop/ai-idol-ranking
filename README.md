@@ -1,1 +1,1 @@
-# ai-idol-ranking
+index.html
