@@ -167,4 +167,51 @@ updateRanks = function() {
 };
 
 updateRanks();
+</script><style>
+@keyframes goldFlash {
+  0% {
+    box-shadow: 0 0 0 rgba(255,215,0,0);
+  }
+  35% {
+    box-shadow: 0 0 30px 10px rgba(255,215,0,.95);
+    border-color: gold;
+  }
+  100% {
+    box-shadow: 0 0 14px rgba(255,215,0,.4);
+  }
+}
+
+.card.gold-flash {
+  animation: goldFlash 1.2s ease-in-out;
+}
+</style>
+
+<script>
+let previousLeader = null;
+
+const originalRankUpdate = updateRanks;
+
+updateRanks = function() {
+  originalRankUpdate();
+
+  const maxPoints = Math.max(...girls.map(g => g.points));
+
+  const leader = maxPoints > 0
+    ? girls.findIndex(g => g.points === maxPoints)
+    : null;
+
+  if (leader !== null && leader !== previousLeader) {
+    const card = document.getElementById('card' + leader);
+
+    if (card) {
+      card.classList.remove('gold-flash');
+      void card.offsetWidth;
+      card.classList.add('gold-flash');
+    }
+  }
+
+  previousLeader = leader;
+};
+
+updateRanks();
 </script></body></html>
