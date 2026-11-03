@@ -77,4 +77,40 @@ support = function(i) {
     alert('あおいの動画を再生できません');
   });
 };
+</script><script>
+const hiyoriPreviousSupport = support;
+
+support = function(i) {
+  hiyoriPreviousSupport(i);
+  if (i !== 2) return;
+
+  const photo = document.getElementById('photo2');
+  const wrap = photo.parentElement;
+  let video = document.getElementById('hiyoriVideo');
+
+  if (!video) {
+    video = document.createElement('video');
+    video.id = 'hiyoriVideo';
+    video.src = 'HiyoriYorokobi.MP4';
+    video.playsInline = true;
+    video.muted = true;
+    video.style.cssText =
+      'width:100%;height:100%;object-fit:contain;display:none';
+    wrap.appendChild(video);
+
+    video.onended = () => {
+      video.style.display = 'none';
+      photo.style.display = '';
+    };
+  }
+
+  photo.style.display = 'none';
+  video.style.display = 'block';
+  video.currentTime = 0;
+  video.play().catch(() => {
+    video.style.display = 'none';
+    photo.style.display = '';
+    alert('ひよりの動画を再生できません');
+  });
+};
 </script></body></html>
