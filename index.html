@@ -265,4 +265,23 @@ updateRanks = function() {
   queenPreviousLeader = leader;
 };
 updateRanks();
+</script><script>
+function getReaction(points) {
+  if (points >= 10) return 'special';
+  if (points >= 5) return 'happy';
+  return 'wave';
+}
+
+const previousSupportReaction = support;
+
+support = function(i) {
+  previousSupportReaction(i);
+
+  const reaction = getReaction(girls[i].points);
+  const card = document.getElementById('card' + i);
+
+  if (card) {
+    card.dataset.reaction = reaction;
+  }
+};
 </script></body></html>
