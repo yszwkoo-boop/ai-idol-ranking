@@ -284,4 +284,71 @@ support = function(i) {
     card.dataset.reaction = reaction;
   }
 };
+</script><script>
+const waveVideos = [
+  'SakuraWave.MP4',
+  'AoiWave.MP4',
+  'HiyoriWave.MP4'
+];
+
+const happyVideos = [
+  'Sakurayorokobi.MP4',
+  'AoiYorokobi.MP4',
+  'HiyoriYorokobi.MP4'
+];
+
+const oldSupportVideo = support;
+
+support = function(i) {
+  const photo = document.getElementById('photo' + i);
+  const wrap = photo?.closest('.photo-wrap');
+
+  // 既存の喜ぶ動画を一時的に再生させない
+  if (wrap) {
+    wrap.style.visibility = 'hidden';
+  }
+
+  oldSupportVideo(i);
+
+  if (!photo || !wrap) return;
+
+  // 既存の動画を停止
+  wrap.querySelectorAll('video').forEach(v => {
+    v.pause();
+    v.remove();
+  });
+
+  // 立ち絵を保持して新しい動画を再生
+  const points = girls[i].points;
+  const src = points < 5
+    ? waveVideos[i]
+    : happyVideos[i];
+
+  const video = document.createElement('video');
+  video.src = src;
+  video.autoplay = true;
+  video.muted = true;
+  video.playsInline = true;
+  video.style.cssText =
+    'width:100%;height:100%;object-fit:contain;';
+
+  photo.style.display = 'none';
+  wrap.appendChild(video);
+  wrap.style.visibility = 'visible';
+
+  let finished = false;
+
+  function restore() {
+    if (finished) return;
+    finished = true;
+    video.remove();
+    photo.style.display = '';
+  }
+
+  video.onended = restore;
+  video.onerror = restore;
+
+  video.play().catch(restore);
+  setTimeout(restore, 12000);
+};
 </script></body></html>
