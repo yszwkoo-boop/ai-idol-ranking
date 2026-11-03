@@ -9,4 +9,37 @@ const girls=[{name:'さくら',points:0},{name:'あおい',points:0},{name:'ひ�
 function support(i){girls[i].points++;document.getElementById('score'+i).textContent=girls[i].points;let photo=document.getElementById('photo'+i);photo.classList.remove('happy');void photo.offsetWidth;photo.classList.add('happy');let card=document.getElementById('card'+i),spark=document.createElement('span');spark.className='spark';spark.textContent='💖✨';card.appendChild(spark);setTimeout(()=>spark.remove(),1250);document.getElementById('message').textContent=girls[i].name+'「応援ありがとう！💖」';updateRanks()}
 function updateRanks(){girls.forEach((g,i)=>{let rank=1+girls.filter(x=>x.points>g.points).length;document.getElementById('rank'+i).textContent=rank+'位';document.getElementById('card'+i).classList.toggle('top',rank===1&&g.points>0)})}
 function resetScores(){girls.forEach((g,i)=>{g.points=0;document.getElementById('score'+i).textContent=0});document.getElementById('message').textContent='好きな子を応援してね！ 💖';updateRanks()}
-updateRanks();</script></body></html>
+updateRanks();</script><script>
+const oldSupport = support;
+support = function(i) {
+  oldSupport(i);
+  if (i !== 0) return;
+
+  const photo = document.getElementById('photo0');
+  const wrap = photo.parentElement;
+  let video = document.getElementById('sakuraVideo');
+
+  if (!video) {
+    video = document.createElement('video');
+    video.id = 'sakuraVideo';
+    video.src = 'Sakurayorokobi.MP4';
+    video.playsInline = true;
+    video.muted = true;
+    video.style.cssText = 'width:100%;height:100%;object-fit:contain;display:none';
+    wrap.appendChild(video);
+    video.onended = () => {
+      video.style.display = 'none';
+      photo.style.display = '';
+    };
+  }
+
+  photo.style.display = 'none';
+  video.style.display = 'block';
+  video.currentTime = 0;
+  video.play().catch(() => {
+    video.style.display = 'none';
+    photo.style.display = '';
+    alert('動画を再生できません。ファイル名を確認してください。');
+  });
+};
+</script></body></html>
